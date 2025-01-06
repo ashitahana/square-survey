@@ -150,39 +150,47 @@ function onbuttonclicked(event) {
     //console.log("Combination key:", combinationKey);
 
     // Get current counts from local storage
-    let colorCounts = JSON.parse(localStorage.getItem("colorCounts")) || {};
+    let storedCounts = JSON.parse(localStorage.getItem("colorCounts")) || {};
 
     // Increment the count for this combination
-    colorCounts[combinationKey] = (colorCounts[combinationKey] || 0) + 1;
+    storedCounts[combinationKey] = (storedCounts[combinationKey] || 0) + 1;
 
     // Save the updated counts back to local storage
-    localStorage.setItem("colorCounts", JSON.stringify(colorCounts));
+    localStorage.setItem("colorCounts", JSON.stringify(storedCounts));
 
     // Log for debugging
     console.log(`Updated count for ${combinationKey}:`, colorCounts[combinationKey]);
 
 
-    window.location.href = "complete.html";
-}
-    //moves to next page, place back into the onbutonclcik after everything works!!
-    //window.location.href = "complete.html";
-     
-    function printLocalStorage() {
-        // Retrieve the colorCounts object from local storage
-        const colorCounts = JSON.parse(localStorage.getItem("colorCounts")) || {};
-    
-        // Log the entire object to the console
-        console.log("Stored Color Counts:", colorCounts);
-    
-        // Optionally, log each key-value pair individually for clarity
-        for (const [combination, count] of Object.entries(colorCounts)) {
-            console.log(`${combination}: ${count}`);
-        }
+    // download cvs
+    let csvContent = "data:text/csv;charset=utf-8,Combination,Count\n";
+    for (const [combination, count] of Object.entries(storedCounts)) {
+        csvContent += `${combination},${count}\n`;
     }
-    
-    // Call this function to print all local storage info
-    printLocalStorage();
 
+    const link = document.createElement("a");
+    link.href = encodeURI(csvContent);
+    link.target = "_blank";
+    link.download = "survey_results.csv"; // Set the filename
+    link.click();
+
+
+
+    // navigation after safe download
+    const confirmNavigation = confirm("The results have been downloaded (that's what that was), EMAIL FILE TO:: jwu60084@gmail.com");
+    if (confirmNavigation) {
+        window.location.href = "complete.html";
+    }
+
+}
+    //time to save everything to csv!!
+
+    const colorCounts = JSON.parse(localStorage.getItem("colorCounts")) || {};
+    console.log("Stored Color Counts:", colorCounts);
+    
+    for (const [combination, count] of Object.entries(colorCounts)) {
+            console.log(`${combination}: ${count}`);
+    }
 
 
 //!!!!!!!!!!!! RESETS THE COLOR COUNTS !!!!!!!!!!!!!!!
