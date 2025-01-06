@@ -1,0 +1,5 @@
+#container{
+    display: flex; /* Enables horizontal layout */
+        flex-wrap: wrap; /* Allows wrapping to the next row if needed */
+        gap: 10px; /* Adds spacing between buttons */
+}
